@@ -14,13 +14,14 @@ Then in RStudio:
 - git pull
 - create files, then push
 
-Can also use:
+Can also use git from cmd:
+- git pull
+- git push
+- git add -A
+- git add script.R
+- git status
+- git commit -m "this is new"
 
-- git from cmd
-- useful commands are
--- git pull
--- git push
--- git add -A
--- git add script.R
--- git status
--- git commit -m "this is new"
+Other ways of using git:
+- notepad++ and plugin
+- sublime 2
