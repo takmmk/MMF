@@ -16,7 +16,8 @@ OneSVM.param.cross.clim.read <- function(err, path=NULL, file=T){
 	for(j in which(bool)){
 cat(j,"\n")
 		vect <- NULL
-		for(i in 1:30){
+		nn <- (length(dir())-3)/nrow(err)
+		for(i in 1:nn){
 			name.file <- paste(paste(c("pred","model",err[j,1]*100,err[j,2]*100,i),
                                sep="",collapse="_"),".txt",sep="")
 			if(!is.null(path)) name.file <- paste(c(path,name.file),sep="",collapse="/")

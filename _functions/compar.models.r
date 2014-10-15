@@ -117,15 +117,13 @@ compar.models <- function(x,
 	# Error matrix
 	if(resampling=="boot"){
 		nb.row.error <- nrep+3
-		name.row.error <- c(paste("boot",1:nrep,sep=""),
-                                c("Mean",".632 error",".632+ error"))
+		name.row.error <- c(paste("boot",1:nrep,sep=""),c("Mean",".632 error",".632+ error"))
 	}
 	else{
 		nb.row.error <- nrep
 		name.row.error <- paste("rep",1:nrep,sep="")
 	}
-	error <- matrix(NA, nb.row.error, 2,
-                      dimnames=list(name.row.error, c("Train","Test")))
+	error <- matrix(NA, nb.row.error, 2,dimnames=list(name.row.error, c("Train","Test")))
 
 	# Initialize probabilities, errors and indeces matrix of each method
 	for(i in 1:nb.meth){
@@ -287,9 +285,9 @@ cat("\n\n")
                                     knn.par=knn.par, svm.par=svm.par, nnet.par=nnet.par, 
                                     nbtree=nbtree, bagging=bagging, boosting=boosting))
 		}
-#		else{
-#			assign(n.err, rbind(get(n.err), "Mean"=apply(get(n.err),2,mean)))
-#		}
+		else{
+			assign(n.err, rbind(get(n.err), "Mean"=apply(get(n.err),2,mean)))
+		}
 
 		# Change structure of index for output
 		assign(n.ind, summary.indexes(get(n.ind),  boxplots=T))

@@ -4,15 +4,15 @@
 # Updated :   January 2010
 
 
-kmeans.plot <- function(sp.name, thresh=0, save.fig, file.out, preva=50) {
+kmeans.plot <- function(sp.name, thresh=0, save.fig, file.out, prev=50) {
 
 	# Start to measure process time
 	ptm1 <- proc.time()
 
 	# Load data
-	setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_dist_data_OCSVM\\",sp.name,sep=""))
-	load(paste(sp.name,"_kmeans_undersampling_object_threshold_",thresh,"_prev_",preva,".RData",sep=""))
-	species_abs <- read.table(paste(sp.name,"_data_absences_threshold_",thresh,".txt",sep=""),header=T)
+	setwd(paste("C:\\MMA on HD\\",species.name,"\\_dist_data_OCSVM",sep=""))
+	load(paste(sp.name,"_kmeans_undersampling_object_thresh_",thresh,"_prev_",prev,".RData",sep=""))
+	species_abs <- read.table(paste(sp.name,"_data_absences_thresh_",thresh,".txt",sep=""),header=T)
 	prevalence <- length(data.abs.kmeans$size)
 	n_points_cluster <- data.abs.kmeans$size 
 	which_cluster <- data.abs.kmeans$cluster
@@ -23,9 +23,9 @@ cat("Data loaded \n")
 
 	# Cluster colors plotted, k=prevalence
 	win.graph(width=70,height=40)
-	plot(border.no.nz[,2], border.no.nz[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
-	points(species_abs[,1],species_abs[,2],col=colors()[1+which_cluster],pch=16,cex=0.2)
-	savePlot(paste(sp.name,"_cluster_colours_for_relevant_absences_threshold_",thresh,"_prev_",preva,".png",sep=""), type="png")
+	plot(border.no.nz$xcoord, border.no.nz$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
+	points(species_abs$xcoord,species_abs$ycoord,col=colors()[1+which_cluster],pch=16,cex=0.2)
+	savePlot(paste(sp.name,"_cluster_colours_for_relevant_absences_thresh_",thresh,"_prev_",prev,".png",sep=""), type="png")
 
 cat("Clusters plotted \n")
 
@@ -52,22 +52,22 @@ cat("k =",k,"\n")
 		min_eucl_dist <- eucl_dist <- NULL; temp <- Inf; which.m <- 1
 	}
 
-	if (file.out) write.table(out,file=paste(sp.name,"_centroid_closest_data_threshold_",thresh,"_prev_",preva,".txt",sep=""),row.names=F)
+	if (file.out) write.table(out,file=paste(sp.name,"_centroid_closest_data_thresh_",thresh,"_prev_",prev,".txt",sep=""),row.names=F)
 
 cat("Minimum distance done \n")
 
 
 	# Plot closest data points to centroids on map
-	plot(border.no.nz[,2], border.no.nz[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
-	points(species_abs[out[,2],1],species_abs[out[,2],2],cex=0.5,pch=16,col=3)
-	if (save.fig) savePlot(paste(sp.name,"_closest_points_to_centroids_threshold_",thresh,"_prev_",preva,".png",sep=""), type="png")
+	plot(border.no.nz$xcoord, border.no.nz$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
+	points(species_abs$xcoord[out[,2]],species_abs$ycoord[out[,2]],cex=0.5,pch=16,col=3)
+	if (save.fig) savePlot(paste(sp.name,"_closest_points_to_centroids_thresh_",thresh,"_prev_",prev,".png",sep=""), type="png")
 
 	# Plot presences and points closest to representative absences
-	plot(border.no.nz[,2], border.no.nz[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
-	points(species[,2],species[,3],cex=0.5,pch=16,col=2)
-	points(species_abs[out[,2],1],species_abs[out[,2],2],cex=0.5,pch=16,col=3)
+	plot(border.no.nz$xcoord, border.no.nz$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
+	points(species$xcoord,species$ycoord,cex=0.5,pch=16,col=2)
+	points(species_abs$xcoord[out[,2]],species_abs$ycoord[out[,2]],cex=0.5,pch=16,col=3)
 	legend(-150,-40,col=c(2,3),legend=c("Presence","Absence"),pch=16)
-	if (save.fig) savePlot(paste(sp.name,"_closest_points_to_centroids_with_pres_threshold_",thresh,"_prev_",preva,".png",sep=""), type="png")
+	if (save.fig) savePlot(paste(sp.name,"_closest_points_to_centroids_with_pres_thresh_",thresh,"_prev_",prev,".png",sep=""), type="png")
 
 	# calculate total process time
 	ptm2 <- proc.time()

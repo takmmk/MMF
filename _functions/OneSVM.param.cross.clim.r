@@ -82,6 +82,8 @@ OneSVM.param.cross.clim <- function(data1.x,
 		}
 
 		# Evaluation of one-class SVM by k-fold cross-validation
+		
+		# PErhAPS ERROR HERE #
 		model <- OneSVM.CrossVal(data1=data.x, data2=dataTest.x, NbGroup = k, OneSVM.par = c(g, n))
 		if(model$error.test < .5){
 			nb <- nb + 1
@@ -118,6 +120,7 @@ OneSVM.param.cross.clim <- function(data1.x,
 	out <- NULL
 	rownames(error) <- paste("model_", 1:nb.models, sep="")
 	error.ord <- error[order(error[,4]),]
+#	if (is.null(dim(error2))) error2 <- t(as.matrix(error2))
 	colnames(error2) <- colnames(error)
 	rownames(error2) <- paste("model_", 1:nrow(error2), sep="")
 	out$models.in  <- error.ord

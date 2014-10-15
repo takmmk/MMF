@@ -22,8 +22,8 @@ best.model.criteria <- function(sp.name,method,save.file=T,object.assign=F,thres
 # Set directory for species and load criteria from model comparison
 # ---------------------------------------------------------------- #
  
-if (is.na(thresh)) setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_results_compar.models\\",sp.name,sep=""))
-if (!is.na(thresh)) setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_results_compar.models\\",sp.name,"\\",thresh,"\\",prev,sep=""))
+if (is.na(thresh)) setwd(paste("C:\\MMA on HD\\",sp.name,"\\_results_compar.models",sep=""))
+if (!is.na(thresh)) setwd(paste("C:\\MMA on HD\\",sp.name,"\\_results_compar.models,",thresh,"\\",prev,sep=""))
 ranks.table <- read.table(paste(sp.name,"_compar_models_",method,"_general_ranks_table.txt",sep=""),header=T)
 load(paste(sp.name,"_compar_models_",method,"_output_object.Rdata",sep=""))
 

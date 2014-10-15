@@ -4,7 +4,8 @@
 bootstrap.condor <- function(species.name,nreps) {
 	data <- read.table(paste(species.name,"_data_pres_abs_best.txt",sep=""), header=TRUE)
 	data <- data[data$pres==1,]
-	setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_condor\\",species.name,"\\boot",sep=""))
+	setwd(paste("C:\\MMA on HD\\",species.name,"\\_condor\\boot",sep=""))
+#	setwd(("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_condor\\",species.name,"\\boot",sep=""))
 	boot.mat <- matrix(NA,dim(data)[1],nreps)
 	colnames(boot.mat) <- c(paste(rep("Boot",nreps),1:nreps,sep=""))
 

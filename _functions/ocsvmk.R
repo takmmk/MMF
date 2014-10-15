@@ -1,4 +1,4 @@
-ocsvmk <- function(sp.name, color.choice, nb=10, save.fig, file.out,do.kmeans=T,thresh=0,preva=50) {
+ocsvmk <- function(sp.name, color.choice, nb=10, save.fig, file.out,do.kmeans=T,thresh=0,prev=50) {
 
 
 # ------------------------ #--# ------------------------ #
@@ -18,7 +18,7 @@ ocsvmk <- function(sp.name, color.choice, nb=10, save.fig, file.out,do.kmeans=T,
 #		F: no kmeans calculation, just ocsvm plots
 # thresh = 0, absences combined from predictions with probability = 0 (default).
 #             if thresh = t (100>t>0), it will take marginal probabilities (percentage) < t
-# preva = 50 (default), from 0 to 100
+# prev = 50 (default), from 0 to 100
 
 # OUTPUT:
 # a) maps
@@ -40,7 +40,8 @@ ocsvmk <- function(sp.name, color.choice, nb=10, save.fig, file.out,do.kmeans=T,
 # ------------------------------ #
 
 for(i in 1:nb){
-setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_OCSVM_results\\",species.name,sep=""))
+#setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_OCSVM_results\\",species.name,sep=""))
+	setwd(paste("C:\\MMA on HD\\",species.name,"\\_OCSVM_results",sep=""))
 	assign(paste("vote",i,sep=""),read.table("votes.txt",header=T))
 	assign(paste("model.in.",i,sep=""),read.table("model_in.txt",header=T))
 	assign(paste("model.out.",i,sep=""),read.table("model_out.txt",header=T))
@@ -52,7 +53,8 @@ setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_OCSVM_resul
 # Sum votes # 
 # --------- #
 
-setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_OCSVM_results\\",species.name,sep=""))
+setwd(paste("C:\\MMA on HD\\",species.name,"\\_OCSVM_results",sep=""))
+
 for(i in 1:nb){
 	if(i == 1) {
 		final.vote <- get(paste("vote",i,sep=""))[,1]
@@ -80,10 +82,10 @@ cat("Saved output step1 \n")
 # ---------- #
 
 # DATA
-setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_dist_data&gbif\\",species.name,sep=""))
-species <- read.table(paste(sp.name,"_worldclim.txt",sep=""),header=T)
+#setwd(paste("C:\\MMA on HD\\",species.name,"\\_dist_data",sep=""))
+#species <- read.table(paste(sp.name,"_worldclim.txt",sep=""),header=T)
 
-ind <- species[,2:3]
+ind <- species[,1:2]
 #inds <- read.table(paste(sp.name,"_data_with_gbif.txt",sep=""),header=T)
 ind[,3] <- 1
 colnames(ind)[3] <- "pres"
@@ -101,7 +103,9 @@ species <- species[which(ind[,3]!=0),]
 # Save models.in/.out
 # ------------------- #
 
-setwd(paste("R:\\Intelligent systems for biosecurity\\INVASIVE_SPP\\_dist_data_OCSVM\\",species.name,sep=""))
+setwd(paste("C:\\MMA on HD\\",species.name,"\\_dist_data_OCSVM",sep=""))
+write.table(model.in, paste(sp.name,"_models_in.txt",sep=""), row.names=F)
+write.table(model.in, paste(sp.name,"_models_in.txt",sep=""), row.names=F)
 write.table(model.in, paste(sp.name,"_models_in.txt",sep=""), row.names=F)
 write.table(model.out,paste(sp.name,"_models_out.txt",sep=""), row.names=F)
 cat("Saved output step2 \n")
@@ -214,8 +218,15 @@ legend.loc <- c(-120,-10)
 cex1 <- 0.2
 pch1 <- 16
 	
+# added in function. Remove from script if it works
+#f <- function(x) sum(is.na(x))==0
+#bool <- apply(worldclim[,chosen.v],1,f) 
+#worldclim2 <- worldclim[bool,chosen.v]  
+#x <- worldclim[bool,c(1,2)] # all coordinates
+
 win.graph(width=70,height=40)
-plot(x[,1],x[,2],cex=cex1,pch=pch1,col=col, xlab="Longitude", ylab="Latitude")
+plot(border$xcoord, border$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
+points(x[,1],x[,2],cex=cex1,pch=pch1,col=col)
 legend(legend.loc[1],legend.loc[2], legend=c(paste("<",spl[1]), 
 					paste(paste(spl[1],"-"),spl[2]),
 					paste(paste(spl[2],"-"),spl[3]),
@@ -228,7 +239,7 @@ legend(legend.loc[1],legend.loc[2], legend=c(paste("<",spl[1]),
 					paste(">",spl[9])), 
 					col=col.vec,
 					pch=15,bg="white", cex=0.7)
-#points(border.no.nz[,2], border.no.nz[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
+#points(border.no.nz$xcoord, border.no.nz$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
 #title(paste("Prediction for World",sp.name,sep=","))
 if(save.fig) savePlot(paste(sp.name,"_World_ensemble_oneSVM_",color.choice,"_no_pres.png",sep=""), type="png")
 
@@ -236,16 +247,16 @@ if(save.fig) savePlot(paste(sp.name,"_World_ensemble_oneSVM_",color.choice,"_no_
 # Plot presences on top of ocsvm
 # -------------------------------- #
 
-points(species[,2], species[,3], col="magenta",pch=20, cex=0.5)
+points(species$xcoord, species$ycoord, col="magenta",pch=20, cex=0.5)
 if(save.fig) savePlot(paste(sp.name,"_World_ensemble_oneSVM_",color.choice,"_pres.png",sep=""), type="png")
 
 # ------------------- #
 # Plot just presences 
 #-------------------- #
 
-plot(border[,2], border[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
+plot(border$xcoord, border$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
 #plot(worldclim[!bool2,2],worldclim[!bool2,3],cex=0.01, lwd=0.05,xlab="Longitude", ylab="Latitude")
-points(species[,2], species[,3], col="magenta",pch=20, cex=0.5)
+points(species$xcoord, species$ycoord, col="magenta",pch=20, cex=0.5)
 if(save.fig) savePlot(paste(sp.name,"_World_presences.png",sep=""), type="png")
 
 # ------------------------ #
@@ -268,20 +279,20 @@ if (thresh > 0)  bool.abs <- res[,2] < thresh/100
 dat.abs <- cbind(x[bool.abs,1],x[bool.abs,2],res[bool.abs,], worldclim2[bool.abs,])
 #if(sp.name=="ks") dat.abs <- dat.abs[1:450000,]
 colnames(dat.abs)[1:4] <- c("xcoord", "ycoord","Vote","Prob")
-if(file.out) write.table(dat.abs, paste(sp.name,"_data_absences_threshold_",thresh,".txt",sep=""), row.names=F)
+if(file.out) write.table(dat.abs, paste(sp.name,"_data_absences_thresh_",thresh,".txt",sep=""), row.names=F)
 
 
 #----------------- ------------------------ #
 # Random undersampling of relevant absences
 # ----------------------------------------- #
 
-	n.abs <- round(nrow(species)*(100-preva)/preva)
+	n.abs <- round(nrow(species)*(100-prev)/prev)
 	index <- sample(nrow(dat.abs), n.abs, replace=F)
 	dat.abs.sample <- dat.abs[index,]
-	plot(border.no.nz[,2], border.no.nz[,3], cex=0.2, xlab="Longitude", ylab="Latitude")
+	plot(border.no.nz$xcoord, border.no.nz$ycoord, cex=0.2, xlab="Longitude", ylab="Latitude")
 	points(dat.abs.sample[,1], dat.abs.sample[,2], col="blue",pch=20, cex=0.5)
-	if(save.fig) savePlot(paste(sp.name,"_World_random_absences_threshold_",thresh,"_prev_",preva,".png",sep=""), type="png")
-	if(file.out) write.table(dat.abs.sample, paste(sp.name,"_random_abs_threshold_",thresh,"_prev_",preva,".txt",sep=""), row.names=F)
+	if(save.fig) savePlot(paste(sp.name,"_World_random_absences_thresh_",thresh,"_prev_",prev,".png",sep=""), type="png")
+	if(file.out) write.table(dat.abs.sample, paste(sp.name,"_random_abs_thresh_",thresh,"_prev_",prev,".txt",sep=""), row.names=F)
 	graphics.off()
 
 cat("All plots done \n")
@@ -292,15 +303,15 @@ cat("All plots done \n")
 # ---------------------------------------------------- #
 
 if (do.kmeans) {
-	n.abs <- round(nrow(species)*(100-preva)/preva)
+	n.abs <- round(nrow(species)*(100-prev)/prev)
 	data.abs.kmeans <- kmeans(dat.abs[,-(1:4)], n.abs, iter.max=100)
 	pres <- cbind(species[,chosen.v], rep(1,nrow(species)))
 	abs <- cbind(data.abs.kmeans$centers, rep(0,n.abs))
 	colnames(pres)[ncol(pres)] <- colnames(abs)[ncol(abs)] <- "pres"
 	data.pres.abs <- rbind(pres,abs)
 	if(file.out) {
-		write.table(data.pres.abs, paste(sp.name,"_data_pres_abs_threshold_",thresh,"_prev_",preva,".txt",sep=""), row.names=F)
-		save(data.abs.kmeans, file=paste(sp.name,"_kmeans_undersampling_object_threshold_",thresh,"_prev_",preva,".RData",sep=""))
+		write.table(data.pres.abs, paste(sp.name,"_data_pres_abs_thresh_",thresh,"_prev_",prev,".txt",sep=""), row.names=F)
+		save(data.abs.kmeans, file=paste(sp.name,"_kmeans_undersampling_object_thresh_",thresh,"_prev_",prev,".RData",sep=""))
 	}
 
 	cat("K-means done \n")
