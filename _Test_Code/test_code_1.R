@@ -6,3 +6,5 @@ z <- x + y
 x <- z/10
 
 # end
+
+# This chunk of code is added after committing
