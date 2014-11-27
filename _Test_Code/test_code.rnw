@@ -1,0 +1,8 @@
+\documentclass{article}
+
+\begin{document}
+
+first R knitr file for testing Rstudio and git
+
+
+\end{document}
