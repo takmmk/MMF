@@ -4,5 +4,5 @@
 
 first R knitr file for testing Rstudio and git
 
-
+second line of code added
 \end{document}
