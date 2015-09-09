@@ -77,8 +77,8 @@ predict.model <- function(model,
 		"NB"   = {
 			if (nrow(test)<6000) model.prob  <- predict(model,newdata=test)$posterior[,2]
 			if (nrow(test)>6000) { # testing on worldclim or nz
-				pred1 <- predict(model,newdata=test[     1:300000,], type="response")
-				pred2 <- predict(model,newdata=test[300001:nrow(test),], type="response")
+				pred1 <- predict(model,newdata=test[     1:300000,], type="response")$posterior[,2]
+				pred2 <- predict(model,newdata=test[300001:nrow(test),], type="response")$posterior[,2]
 				model.prob <- c(pred1,pred2)
 			}
 			model.pred  <- as.numeric(model.prob>0.5)
